@@ -129,6 +129,20 @@ class TestMecAS2(Pyas2TestCase):
         self.assertEqual(status, 'processed/error')
         self.assertEqual(detailed_status, 'authentication-failed')
 
+
+    def test_unsigned_incomplete_mdn(self):
+        """ Test Unsigned MDN received from Mendelson AS2"""
+
+        # Parse the generated AS2 message as the partner
+        received_file = os.path.join(TEST_DIR, 'mecas2_unsigned_incomplete_headers.mdn')
+        with open(received_file, 'rb') as fp:
+            in_message = as2.Mdn()
+            status, detailed_status = in_message.parse(
+                fp.read(), find_message_cb=self.find_message)
+
+        self.assertEqual(status, 'processed/error')
+        self.assertEqual(detailed_status, 'authentication-failed')
+
     def test_signed_mdn(self):
         """ Test Signed MDN received from Mendelson AS2"""
 
